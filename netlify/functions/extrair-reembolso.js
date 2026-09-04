@@ -71,6 +71,15 @@ ${listaEventos}`;
     });
 
     const data = await response.json();
+
+    if (!response.ok || !data?.content) {
+      console.error('Erro na API da Anthropic:', JSON.stringify(data));
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ erro: 'Falha ao chamar a IA', detalhe: data })
+      };
+    }
+
     const textoResposta = data?.content?.find(b => b.type === 'text')?.text || '{}';
     const limpo = textoResposta.replace(/```json|```/g, '').trim();
 
