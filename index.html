@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Captura de Reembolso</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f4f4f5;
+  }
+  h1 { font-size: 1.3rem; }
+  textarea, input[type="file"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    background: #2A7706;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+  button:disabled { background: #999; }
+  #preview { max-width: 100%; border-radius: 8px; margin: 10px 0; display: none; }
+  #resultado {
+    margin-top: 16px;
+    background: white;
+    border-radius: 8px;
+    padding: 14px;
+    white-space: pre-wrap;
+    font-family: monospace;
+    font-size: 0.85rem;
+    display: none;
+  }
+  .campo { margin-bottom: 6px; }
+  .label { color: #555; font-size: 0.8rem; }
+  .valor { font-size: 1rem; font-weight: 600; }
+</style>
+</head>
+<body>
+  <h1>Captura de Reembolso</h1>
+
+  <input type="file" id="foto" accept="image/*" capture="environment">
+  <img id="preview">
+
+  <textarea id="texto" rows="3" placeholder="Poucas palavras: valor, o que foi, evento se souber..."></textarea>
+
+  <button id="btnEnviar">Organizar com IA</button>
+
+  <div id="resultado"></div>
+
+<script>
+  const inputFoto = document.getElementById('foto');
+  const preview = document.getElementById('preview');
+  const btnEnviar = document.getElementById('btnEnviar');
+  const resultadoDiv = document.getElementById('resultado');
+
+  let fotoBase64 = null;
+
+  inputFoto.addEventListener('change', () => {
+    const file = inputFoto.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      // reader.result vem como "data:image/jpeg;base64,XXXXX" — a function espera só o XXXXX
+      fotoBase64 = reader.result.split(',')[1];
+      preview.src = reader.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  btnEnviar.addEventListener('click', async () => {
+    const texto = document.getElementById('texto').value.trim();
+
+    if (!fotoBase64 && !texto) {
+      alert('Manda uma foto ou digita alguma coisa.');
+      return;
+    }
+
+    btnEnviar.disabled = true;
+    btnEnviar.textContent = 'Organizando...';
+    resultadoDiv.style.display = 'none';
+
+    try {
+      const resp = await fetch('/.netlify/functions/extrair-reembolso', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fotoBase64: fotoBase64,
+          textoLivre: texto,
+          eventosConhecidos: [] // ainda sem cache de eventos
+        })
+      });
+
+      const data = await resp.json();
+      mostrarResultado(data);
+
+    } catch (err) {
+      resultadoDiv.style.display = 'block';
+      resultadoDiv.textContent = 'Erro: ' + err.message;
+    }
+
+    btnEnviar.disabled = false;
+    btnEnviar.textContent = 'Organizar com IA';
+  });
+
+  function mostrarResultado(data) {
+    resultadoDiv.style.display = 'block';
+    if (data.erro) {
+      resultadoDiv.innerHTML = '<strong>Erro:</strong> ' + data.erro + '<br>' + JSON.stringify(data.detalhe || '');
+      return;
+    }
+    resultadoDiv.innerHTML = `
+      <div class="campo"><div class="label">Valor</div><div class="valor">R$ ${data.valor ?? '—'}</div></div>
+      <div class="campo"><div class="label">Fornecedor</div><div class="valor">${data.fornecedor ?? '—'}</div></div>
+      <div class="campo"><div class="label">Descrição</div><div class="valor">${data.descricao ?? '—'}</div></div>
+      <div class="campo"><div class="label">Categoria</div><div class="valor">${data.categoria ?? '—'}</div></div>
+      <div class="campo"><div class="label">Data</div><div class="valor">${data.data ?? '—'}</div></div>
+      <div class="campo"><div class="label">Evento sugerido</div><div class="valor">${data.evento_sugerido ?? '— (sem match)'} (${data.confianca_evento})</div></div>
+      ${data.observacao ? `<div class="campo"><div class="label">Observação</div><div class="valor">${data.observacao}</div></div>` : ''}
+    `;
+  }
+</script>
+</body>
+</html>
