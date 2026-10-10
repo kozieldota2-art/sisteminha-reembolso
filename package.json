@@ -1,0 +1,10 @@
+{
+  "name": "atreia-aion2-global",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-netlify.mjs",
+    "build:netlify": "node scripts/build-netlify.mjs",
+    "validate": "node checks.cjs"
+  }
+}
