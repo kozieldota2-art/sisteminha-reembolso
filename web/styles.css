@@ -60,3 +60,35 @@
 .guide-related{display:flex;flex-wrap:wrap;gap:10px;padding:20px 0}
 .guide-related .eyebrow{width:100%;margin-bottom:8px}
 @media(max-width:1000px){.guide-layout{grid-template-columns:1fr}.guide-toc{position:static;display:flex;flex-wrap:wrap;gap:10px;border:1px solid var(--line);padding:14px}.guide-toc .eyebrow{width:100%}.guide-toc a{padding:5px;font-size:11px}.guide-toc .tiny{display:none}}
+.craft-primer{margin:0 0 24px;border-top:3px solid var(--gold)}
+.craft-primer h2,.craft-planner h2{font-size:26px;line-height:1.3}
+.craft-ladder{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:24px 0}
+.craft-ladder span{padding:8px 12px;border:1px solid var(--line);font-size:12px;background:var(--bg)}
+.craft-ladder b{color:var(--gold)}
+.craft-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:26px 0}
+.craft-controls label{font-size:12px;color:var(--muted);display:grid;gap:8px}
+.craft-controls .field{width:100%;min-width:0}
+.craft-plan-summary{display:grid;grid-template-columns:1fr 1fr;gap:20px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:25px 0;margin:20px 0}
+.craft-plan-summary h3{font-size:22px;margin:12px 0}
+.craft-stock{width:90px!important;min-width:70px;padding:8px!important}
+.craft-planner table td{white-space:normal;vertical-align:top;font-size:13px}
+.craft-planner table small{display:block;max-width:320px;color:var(--muted);font-size:11px;margin-top:6px}
+.craft-route{border:1px solid var(--line);padding:24px;min-width:0;background:#111419}
+.craft-route h3{font-size:22px;margin:16px 0 8px}
+.craft-route .list{font-size:13px}
+.craft-route .list small{color:var(--muted)}
+.craft-route-resources{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.craft-route-resources span{font-size:11px;color:var(--mint);border:1px solid #81cbb52b;background:#81cbb509;padding:6px 9px}
+.craft-workorder{display:grid;gap:0;border:1px solid var(--line);margin:24px 0}
+.craft-workorder label{display:flex;gap:14px;padding:18px;border-bottom:1px solid var(--line);font-size:14px;line-height:1.7;cursor:pointer}
+.craft-workorder label:last-child{border-bottom:0}
+.craft-workorder input{accent-color:var(--gold);width:17px;height:17px;flex-shrink:0;margin-top:5px}
+.craft-workorder input:checked+span{text-decoration:line-through;color:var(--muted)}
+.craft-workorder b{color:var(--gold);font-size:12px;display:inline-block;margin-right:15px}
+@media(max-width:900px){.craft-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.craft-route-options{grid-template-columns:1fr}.craft-plan-summary{grid-template-columns:1fr}}
+@media(max-width:540px){.craft-controls{grid-template-columns:1fr}.craft-route{padding:16px}.craft-primer h2,.craft-planner h2{font-size:22px}.craft-workorder label{padding:14px}}
+.craft-route.selected{border-color:var(--gold);box-shadow:inset 0 3px var(--gold)}
+.craft-pet-goals{display:grid;gap:12px;margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
+.craft-pet-goals label{display:grid;gap:7px;font-size:13px}
+.craft-pet-goals label span{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:11px;color:var(--muted)}
+.craft-pet-goals small{font-size:11px;color:var(--mint)}

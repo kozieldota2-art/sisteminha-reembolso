@@ -1,7 +1,7 @@
 const fs=require('fs');const vm=require('vm');const assert=require('assert');
 const elements=new Map();const get=id=>{if(!elements.has(id))elements.set(id,{innerHTML:'',textContent:'',value:'',classList:{add(){},remove(){},toggle(){return true}},setAttribute(){},focus(){},showModal(){},close(){}});return elements.get(id)};
 const storage=new Map();const context={URLSearchParams,document:{getElementById:get,querySelectorAll:()=>[],body:{classList:{remove(){},toggle(){return true}}},addEventListener(){},activeElement:{tagName:'BODY'}},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},location:{hash:'',origin:'https://example.test',pathname:'/'},window:{addEventListener(){},scrollTo(){}},setTimeout:()=>0,navigator:{},console};vm.createContext(context);
-vm.runInContext(fs.readFileSync('web/data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/profile-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/profile.js','utf8'),context);vm.runInContext(fs.readFileSync('web/systems-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/systems.js','utf8'),context);vm.runInContext(fs.readFileSync('web/class-guides.js','utf8'),context);vm.runInContext(fs.readFileSync('web/classes.js','utf8'),context);vm.runInContext(fs.readFileSync('web/compare.js','utf8'),context);vm.runInContext(fs.readFileSync('web/handbook-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/handbook.js','utf8'),context);vm.runInContext(fs.readFileSync('web/app.js','utf8'),context);
+vm.runInContext(fs.readFileSync('web/data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/profile-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/profile.js','utf8'),context);vm.runInContext(fs.readFileSync('web/systems-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/systems.js','utf8'),context);vm.runInContext(fs.readFileSync('web/class-guides.js','utf8'),context);vm.runInContext(fs.readFileSync('web/classes.js','utf8'),context);vm.runInContext(fs.readFileSync('web/compare.js','utf8'),context);vm.runInContext(fs.readFileSync('web/handbook-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/handbook.js','utf8'),context);vm.runInContext(fs.readFileSync('web/craft-planner-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/craft-planner.js','utf8'),context);vm.runInContext(fs.readFileSync('web/app.js','utf8'),context);
 for(const id of ['rush','pets','craft','equipamento','asas','conquistas','panteao','classes','sistemas','inicio','progressao','builds','macros','habilidades','arcana','rotina','fontes']){context.location.hash='#'+id;vm.runInContext('render()',context);assert(get('main').innerHTML.length>1000,id);assert(!get('main').innerHTML.includes('undefined'),id);}
 for(const b of ['dungeon','solo','pvp']){vm.runInContext(`build='${b}'; clericBuildDetails()`,context);}
 assert(vm.runInContext("search('condenacao').some(x=>x.title==='Condenação')",context));assert(vm.runInContext("search('solo').length>0",context));
@@ -49,3 +49,27 @@ vm.runInContext('state.guideTasks={"pets:0":true};save();selectCharacter({charac
 assert(vm.runInContext('!state.guideTasks?.["pets:0"]',context));
 assert(fs.readFileSync('web/app.js','utf8').includes('state.guideTasks=validGuideTasks(x.guideTasks)'));
 console.log('PASS: six handbook routes, section links, source coverage, task validation and character checklist isolation.');
+// Planner correctness: exact recipes, faction resources, stock subtraction and route joins.
+assert(vm.runInContext('CRAFT_RECIPES.length===158&&CRAFT_FARM_ROUTES.length===8',context));
+for(const cls of ['gladiator','templar','assassin','ranger','sorcerer','elementalist','cleric','chanter']){
+ for(const faction of ['asmo','elyos']){
+  for(const stage of ['base','expert','artisan','dragon']){
+   assert(vm.runInContext(`!!craftRecipe(validCraftPlan({classId:'${cls}',faction:'${faction}',target:'weapon',stage:'${stage}'}))`,context));
+  }
+ }
+}
+assert(vm.runInContext("craftMaterials(validCraftPlan({classId:'cleric',faction:'asmo',attempts:5})).find(m=>m.name==='Orichalcum Ore').qty===30",context));
+assert(vm.runInContext("craftMaterials(validCraftPlan({classId:'cleric',faction:'asmo',attempts:5,stock:{'Orichalcum Ore':12}})).find(m=>m.name==='Orichalcum Ore').missing===18",context));
+assert(vm.runInContext("craftMaterials(validCraftPlan({classId:'ranger',faction:'asmo'})).some(m=>m.name==='Asvata Log')&&!craftMaterials(validCraftPlan({classId:'ranger',faction:'asmo'})).some(m=>m.name==='Yggdrasil Log')",context));
+assert(vm.runInContext("craftMaterials(validCraftPlan({classId:'ranger',faction:'elyos'})).some(m=>m.name==='Yggdrasil Log')",context));
+assert(vm.runInContext("craftRecipe(validCraftPlan({target:'bracelet',stage:'expert',faction:'asmo'})).ingredients.some(i=>i.qty===3&&i.kind==='craft')&&!craftRecipe(validCraftPlan({target:'bracelet',stage:'dragon'}))",context));
+assert(vm.runInContext("!craftRecipe(validCraftPlan({target:'arcana'}))&&craftOptions(validCraftPlan({target:'arcana'})).length===0",context));
+assert(vm.runInContext("craftOptions(validCraftPlan({target:'weapon',classId:'cleric',faction:'asmo'}))[0].subzone==='Purifying Forest'",context));
+assert(vm.runInContext("craftOptions(validCraftPlan({target:'weapon',classId:'sorcerer',faction:'elyos'})).some(r=>r.resources.includes('Spiritstone'))",context));
+assert(vm.runInContext("validCraftPlan({attempts:-20,mastery:1000,petGoal:9,stage:'bad',routeId:'bad'}).attempts===1&&validCraftPlan({mastery:1000}).mastery===100&&validCraftPlan({petGoal:9}).petGoal===5",context));
+vm.runInContext("state.craftPlan=validCraftPlan({classId:'cleric',faction:'asmo',attempts:2,stock:{'Orichalcum Ore':12,'Orichalcum Solvent (Bound)':6,'Refining Stone':10,Odyle:4}})",context);
+assert(vm.runInContext('craftOptions(craftCurrent()).length===0',context));
+context.location.hash='#craft';vm.runInContext('render()',context);assert(get('main').innerHTML.includes('Lote completo no estoque informado'));
+vm.runInContext("save();selectCharacter({characterId:'craftfriend',serverId:2403,region:'la',name:'outro'})",context);assert(vm.runInContext('!state.craftPlan',context));
+assert(fs.readFileSync('web/app.js','utf8').includes('state.craftPlan=validCraftPlan(x.craftPlan)'));
+console.log('PASS: craft planner recipes for 8 classes / 2 factions / 4 stages, stock math, bracelet exception, unsupported slots, farm joins and character isolation.');
