@@ -1,7 +1,7 @@
 const fs=require('fs');const vm=require('vm');const assert=require('assert');
 const elements=new Map();const get=id=>{if(!elements.has(id))elements.set(id,{innerHTML:'',textContent:'',value:'',classList:{add(){},remove(){},toggle(){return true}},setAttribute(){},focus(){},showModal(){},close(){}});return elements.get(id)};
 const storage=new Map();const context={URLSearchParams,document:{getElementById:get,querySelectorAll:()=>[],body:{classList:{remove(){},toggle(){return true}}},addEventListener(){},activeElement:{tagName:'BODY'}},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},location:{hash:'',origin:'https://example.test',pathname:'/'},window:{addEventListener(){},scrollTo(){}},setTimeout:()=>0,navigator:{},console};vm.createContext(context);
-vm.runInContext(fs.readFileSync('web/data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/profile-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/profile.js','utf8'),context);vm.runInContext(fs.readFileSync('web/systems-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/systems.js','utf8'),context);vm.runInContext(fs.readFileSync('web/class-guides.js','utf8'),context);vm.runInContext(fs.readFileSync('web/classes.js','utf8'),context);vm.runInContext(fs.readFileSync('web/compare.js','utf8'),context);vm.runInContext(fs.readFileSync('web/handbook-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/handbook.js','utf8'),context);vm.runInContext(fs.readFileSync('web/craft-planner-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/craft-planner.js','utf8'),context);vm.runInContext(fs.readFileSync('web/app.js','utf8'),context);
+vm.runInContext(fs.readFileSync('web/data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/profile-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/profile.js','utf8'),context);vm.runInContext(fs.readFileSync('web/systems-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/systems.js','utf8'),context);vm.runInContext(fs.readFileSync('web/class-guides.js','utf8'),context);vm.runInContext(fs.readFileSync('web/classes.js','utf8'),context);vm.runInContext(fs.readFileSync('web/compare.js','utf8'),context);vm.runInContext(fs.readFileSync('web/handbook-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/currency-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/currency-guide.js','utf8'),context);vm.runInContext(fs.readFileSync('web/handbook.js','utf8'),context);vm.runInContext(fs.readFileSync('web/craft-planner-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/craft-planner.js','utf8'),context);vm.runInContext(fs.readFileSync('web/app.js','utf8'),context);
 for(const id of ['rush','pets','craft','equipamento','asas','conquistas','panteao','classes','sistemas','inicio','progressao','builds','macros','habilidades','arcana','rotina','fontes']){context.location.hash='#'+id;vm.runInContext('render()',context);assert(get('main').innerHTML.length>1000,id);assert(!get('main').innerHTML.includes('undefined'),id);}
 for(const b of ['dungeon','solo','pvp']){vm.runInContext(`build='${b}'; clericBuildDetails()`,context);}
 assert(vm.runInContext("search('condenacao').some(x=>x.title==='Condenação')",context));assert(vm.runInContext("search('solo').length>0",context));
@@ -73,3 +73,20 @@ context.location.hash='#craft';vm.runInContext('render()',context);assert(get('m
 vm.runInContext("save();selectCharacter({characterId:'craftfriend',serverId:2403,region:'la',name:'outro'})",context);assert(vm.runInContext('!state.craftPlan',context));
 assert(fs.readFileSync('web/app.js','utf8').includes('state.craftPlan=validCraftPlan(x.craftPlan)'));
 console.log('PASS: craft planner recipes for 8 classes / 2 factions / 4 stages, stock math, bracelet exception, unsupported slots, farm joins and character isolation.');
+// Currency navigation, source coverage and shared acquisition guidance.
+context.location.hash='#moedas';vm.runInContext('coinQuery="";coinGroup="all";render()',context);
+assert(get('main').innerHTML.includes('coinSearch')&&get('main').innerHTML.includes('NPC · Wisdom Stone'));
+assert(vm.runInContext('CURRENCIES.length>=29&&new Set(CURRENCIES.map(c=>c.id)).size===CURRENCIES.length',context));
+assert(vm.runInContext('CURRENCIES.every(c=>HANDBOOK_SOURCES[c.source]&&(c.sources||[]).every(s=>HANDBOOK_SOURCES[s]))',context));
+assert(vm.runInContext('GUIDE_PURCHASES.every(p=>currencyById(p[1])&&(!p[5]||HANDBOOK_SOURCES[p[5]]))',context));
+assert(vm.runInContext('currencyMatches(currencyById("temporada"),"refining")&&!currencyMatches(currencyById("shugo"),"refining")',context));
+assert(vm.runInContext('currencyMatches(currencyById("arena"),"","PvP")&&!currencyMatches(currencyById("shugo"),"","PvP")',context));
+for(const id of ['craft','pets','equipamento','asas','panteao','conquistas','habilidades','builds','rush','progressao','arcana']){
+ context.location.hash='#'+id;vm.runInContext('render()',context);assert(get('main').innerHTML.includes('guide-shopping'),id);assert(get('main').innerHTML.includes('#moedas?coin='),id);
+}
+context.location.hash='#craft';vm.runInContext('render()',context);assert(get('main').innerHTML.indexOf('Antes de farmar')<get('main').innerHTML.indexOf('craft-planner'));
+assert(vm.runInContext('craftMaterialAcquisition({name:"Refining Stone",kind:"drop"}).includes("Oath Coin")',context));
+assert(vm.runInContext('!currencyById("arena").offers.length&&currencyById("arena").avoid.includes("não está confirmado")',context));
+assert(vm.runInContext('search("centuryroot").some(s=>s.id==="moedas?coin=shugo")',context));
+assert(vm.runInContext('validGuideTasks({"moedas:0":true})["moedas:0"]===true',context));
+console.log('PASS: currency filters, catalog sources, deep links, acquisition guidance in 11 guides and unverified Arena offer exclusion.');
