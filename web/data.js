@@ -1,8 +1,10 @@
 'use strict';
 const GUIDE = {
- updated:'09/10/2026',
- nav:[['inicio','✧','Início'],['personagem','◉','Personagens'],['builds','⚔','Builds'],['ajustes','◎','Comparar & ajustar'],['progressao','↗','Progressão'],['sistemas','▦','Sistemas do jogo'],['macros','⌘','Macros'],['habilidades','◇','Skills & Daevanion'],['arcana','▱','Arcana & Transcendência'],['rotina','☑','Meu caderno'],['fontes','↗','Fontes']],
+ updated:'10/10/2026',
+ nav:[['inicio','✧','Início'],['personagem','◉','Personagens'],['builds','⚔','Builds'],['ajustes','◎','Comparar & ajustar'],['rush','⚡','Rush 1400'],['progressao','↗','Progressão'],['sistemas','▦','Sistemas do jogo'],['macros','⌘','Macros'],['habilidades','◇','Skills & Daevanion'],['arcana','▱','Arcana & Transcendência'],['rotina','☑','Meu caderno'],['fontes','↗','Fontes']],
  sources:[
+ {id:'rushroute',title:'Rush 1400 · rota curta',url:'https://aion2tierlist.com/guides/aion-2-gear-score-1400',type:'Guia comunitário · Global',note:'Rota de campanha, mapa, Monólito e melhorias. A afirmação de nível 16 como máximo absoluto do Monólito do Abismo diverge de outras fontes; o portal trata 16 como marco da rota.'},
+ {id:'rushvideos',title:'Duky / Fubgun · referências de rush',url:'https://aion2.vi.ki/item-level-roadmap',type:'Índice de vídeos · Global',note:'Aponta How To Get To 1400 Item Level, de Duky, e o rush de Fubgun. Vídeos não reproduzidos diretamente nesta revisão; roteiro cruzado com guias escritos.'},
  {id:'db',title:'Gaming.tools · Clérigo Global',url:'https://aion2.gaming.tools/pt-br/classes/cleric',type:'Banco de dados Global',note:'Nomes em português e páginas individuais de habilidades. Alguns cabeçalhos exibem limites técnicos maiores que os disponíveis no lançamento; use os marcos de 8/12/16/20 e confira o cliente.'},
  {id:'lucia',title:'Lucia · guia de Clérigo',url:'https://www.youtube.com/watch?v=KptUtnv35vk',type:'Criador · adaptado ao Global',note:'Build, prioridades e macro. O vídeo não foi reproduzido diretamente nesta pesquisa; a configuração foi cruzada com referências escritas que apontam os trechos.'},
  {id:'alucky',title:'aLuckyRO · PvE para Global',url:'https://www.youtube.com/watch?v=A3pZDSt4ceU',type:'Criador · Global',note:'Especializações para começar, sustain e diferenças entre farm e boss. Conteúdo atribuído por guias com referências; reprodução direta indisponível na pesquisa.'},
@@ -19,6 +21,16 @@ const GUIDE = {
  {id:'planner',title:'Questlog · planejador Global',url:'https://questlog.gg/aion-2/en-nc/character-builder',type:'Ferramenta',note:'Para conferir linhas e montar builds. Selecione Global e confirme o tabuleiro de Clérigo.'},
  {id:'reddit',title:'Reddit · r/Aion2',url:'https://www.reddit.com/r/Aion2/',type:'Discussão de jogadores',note:'Relatos úteis para descobrir problemas; confirme patch, região e contexto antes de copiar uma solução.'},
  {id:'steam',title:'Steam · discussões de Aion 2',url:'https://steamcommunity.com/app/3393110/discussions/',type:'Discussão de jogadores',note:'Acompanhe dúvidas do lançamento. Comentários não confirmam fórmulas de dano ou regras de loot.'}
+ ],
+ rush:[
+ {title:'Campanha e nível 45',text:'Avance a campanha, use o equipamento recebido e complete o requisito para abrir o Abismo. A rota é para qualquer classe; confira slots vazios antes de melhorar peças.',source:'rushroute'},
+ {title:'Mapa da sua facção',text:'Faça masmorras seladas (interrogações), fortalezas e missões regionais verdes. Asmodianos: Altgard. Elyseanos: Verteron. Use as recompensas de acessórios para preencher slots.',source:'rushroute'},
+ {title:'Monólito e penas',text:'Colete Rastros Empíreos e entregue no Monólito regional. O alvo da rota é nível 30. No Abismo, o marco citado é 16; consulte o mapa disponível e o cliente, sem confundir esse marco com o limite total.',source:'rushroute'},
+ {title:'Cristais viram nós de Daevanion',text:'Use os cristais e distribua os pontos. Receber a moeda não completa a melhoria: aprenda os nós, favorecendo caminhos úteis para suas skills. Se faltar GS, confira cristais acessíveis nas lojas de Pesadelo e Festival Shugo.',source:'raid'},
+ {title:'Cinto e amuleto permanentes',text:'Use pergaminhos das fortalezas para o cinto e do Monólito para o amuleto. A rota descrita é Raro +10 → transmutar para Épico +0 → Épico +10 → Único +0. Confira materiais e custo antes de confirmar; pare no Único +0 nesta etapa.',source:'raid'},
+ {title:'Melhorias com limite de gasto',text:'Comece com peças temporárias de missão em +5. Arma e guarda da campanha podem ir a +10 conforme os materiais. Não melhore tudo a +10 por padrão: compare o GS que falta e o custo antes.',source:'corpus'},
+ {title:'Runas e encaixes vazios',text:'Equipe as duas runas obtidas em missões; a referência econômica é +1. Além disso pode haver destruição por falha. Preencha encaixes com pedras inferiores compatíveis; evite buscar linhas perfeitas em equipamento temporário.',source:'corpus'},
+ {title:'Pare em 1400 e mude de ciclo',text:'Confira o GS após cada etapa. Ao alcançar 1400, revise a entrada de Vakron e Urugugu e escolha recompensas por slot. Não é necessário completar todos os passos restantes só para cumprir esta rota.',source:'rushvideos'}
  ],
  stages:[
  {gs:1400,title:'Seu novo ciclo de equipamento',subtitle:'Conquest de tier 2',text:'Vakron Sky Island fornece armadura e guard; Urugugu Canyon fornece arma e acessórios. Abra recompensas com um objetivo de slot. Use a garantia para completar o que falta.',tasks:['Revisar slots antigos, vazios e sockets','Farmar Vakron para armadura / guard','Comparar Urugugu com custo de crafting de arma / acessórios','Escolher a peça faltante na recompensa garantida'],source:'raid'},
