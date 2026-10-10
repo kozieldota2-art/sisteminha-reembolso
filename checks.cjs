@@ -1,8 +1,8 @@
 const fs=require('fs');const vm=require('vm');const assert=require('assert');
 const elements=new Map();const get=id=>{if(!elements.has(id))elements.set(id,{innerHTML:'',textContent:'',value:'',classList:{add(){},remove(){},toggle(){return true}},setAttribute(){},focus(){},showModal(){},close(){}});return elements.get(id)};
 const storage=new Map();const context={URLSearchParams,document:{getElementById:get,querySelectorAll:()=>[],body:{classList:{remove(){},toggle(){return true}}},addEventListener(){},activeElement:{tagName:'BODY'}},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},location:{hash:'',origin:'https://example.test',pathname:'/'},window:{addEventListener(){},scrollTo(){}},setTimeout:()=>0,navigator:{},console};vm.createContext(context);
-vm.runInContext(fs.readFileSync('web/data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/profile-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/profile.js','utf8'),context);vm.runInContext(fs.readFileSync('web/systems-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/systems.js','utf8'),context);vm.runInContext(fs.readFileSync('web/class-guides.js','utf8'),context);vm.runInContext(fs.readFileSync('web/classes.js','utf8'),context);vm.runInContext(fs.readFileSync('web/compare.js','utf8'),context);vm.runInContext(fs.readFileSync('web/app.js','utf8'),context);
-for(const id of ['classes','sistemas','inicio','progressao','builds','macros','habilidades','arcana','rotina','fontes']){context.location.hash='#'+id;vm.runInContext('render()',context);assert(get('main').innerHTML.length>1000,id);assert(!get('main').innerHTML.includes('undefined'),id);}
+vm.runInContext(fs.readFileSync('web/data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/profile-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/profile.js','utf8'),context);vm.runInContext(fs.readFileSync('web/systems-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/systems.js','utf8'),context);vm.runInContext(fs.readFileSync('web/class-guides.js','utf8'),context);vm.runInContext(fs.readFileSync('web/classes.js','utf8'),context);vm.runInContext(fs.readFileSync('web/compare.js','utf8'),context);vm.runInContext(fs.readFileSync('web/handbook-data.js','utf8'),context);vm.runInContext(fs.readFileSync('web/handbook.js','utf8'),context);vm.runInContext(fs.readFileSync('web/app.js','utf8'),context);
+for(const id of ['rush','pets','craft','equipamento','asas','conquistas','panteao','classes','sistemas','inicio','progressao','builds','macros','habilidades','arcana','rotina','fontes']){context.location.hash='#'+id;vm.runInContext('render()',context);assert(get('main').innerHTML.length>1000,id);assert(!get('main').innerHTML.includes('undefined'),id);}
 for(const b of ['dungeon','solo','pvp']){vm.runInContext(`build='${b}'; clericBuildDetails()`,context);}
 assert(vm.runInContext("search('condenacao').some(x=>x.title==='Condenação')",context));assert(vm.runInContext("search('solo').length>0",context));
 assert(vm.runInContext("gsResult().includes('200')",context));
@@ -36,3 +36,16 @@ context.location.hash='#inicio';vm.runInContext('selectCharacter({characterId:"o
 assert(vm.runInContext('computeComparison(INITIAL_PROFILE,"cleric","invalid",{},null)===null',context));
 assert(!fs.readFileSync('web/index.html','utf8').toLowerCase().includes('smk'));assert(!vm.runInContext('home()',context).toLowerCase().includes('smk'));
 console.log('PASS: comparison gaps, zero targets, historical deltas, notes, AI context, missing profiles, invalid modes and independent character goals.');
+for(const routeId of ['pets','craft','equipamento','asas','conquistas','panteao']){
+ context.location.hash='#'+routeId;vm.runInContext('render()',context);
+ assert(get('main').innerHTML.includes('data-guide-task'),routeId);
+ assert(vm.runInContext(`HANDBOOK.${routeId}.sections.every(s=>s.sources.length&&s.sources.every(id=>HANDBOOK_SOURCES[id]))`,context));
+ assert(vm.runInContext(`new Set(HANDBOOK.${routeId}.sections.map(s=>s.id)).size===HANDBOOK.${routeId}.sections.length`,context));
+}
+assert(vm.runInContext("search('bakarma').some(s=>s.id.startsWith('panteao?section='))",context));
+context.location.hash='#craft?section=cooking';assert(vm.runInContext('route()==="craft"',context));vm.runInContext('render()',context);
+assert(vm.runInContext('validGuideTasks({"craft:0":true,"craft:1":"true","bad:0":true})["craft:0"]===true&&validGuideTasks({"craft:1":"true"})["craft:1"]===false',context));
+vm.runInContext('state.guideTasks={"pets:0":true};save();selectCharacter({characterId:"checklistfriend",serverId:2403,region:"la",name:"teste"})',context);
+assert(vm.runInContext('!state.guideTasks?.["pets:0"]',context));
+assert(fs.readFileSync('web/app.js','utf8').includes('state.guideTasks=validGuideTasks(x.guideTasks)'));
+console.log('PASS: six handbook routes, section links, source coverage, task validation and character checklist isolation.');

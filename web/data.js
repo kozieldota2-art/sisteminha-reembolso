@@ -1,7 +1,7 @@
 'use strict';
 const GUIDE = {
  updated:'10/10/2026',
- nav:[['inicio','✧','Início'],['personagem','◉','Personagens'],['builds','⚔','Builds'],['ajustes','◎','Comparar & ajustar'],['rush','⚡','Rush 1400'],['progressao','↗','Progressão'],['sistemas','▦','Sistemas do jogo'],['macros','⌘','Macros'],['habilidades','◇','Skills & Daevanion'],['arcana','▱','Arcana & Transcendência'],['rotina','☑','Meu caderno'],['fontes','↗','Fontes']],
+ nav:[['inicio','✧','Início'],['personagem','◉','Personagens'],['builds','⚔','Builds'],['ajustes','◎','Comparar & ajustar'],['rush','⚡','Rush 1400'],['progressao','↗','Progressão'],['sistemas','▦','Guias do jogo'],['conquistas','♜','Conquistas'],['panteao','♢','Panteão'],['pets','◈','Mascotes & Genus'],['asas','✦','Asas'],['craft','⚒','Craft & transmutação'],['equipamento','◇','Equipamento & pedras'],['macros','⌘','Macros'],['habilidades','◇','Skills & Daevanion'],['arcana','▱','Arcana & Transcendência'],['rotina','☑','Meu caderno'],['fontes','↗','Fontes']],
  sources:[
  {id:'rushroute',title:'Rush 1400 · rota curta',url:'https://aion2tierlist.com/guides/aion-2-gear-score-1400',type:'Guia comunitário · Global',note:'Rota de campanha, mapa, Monólito e melhorias. A afirmação de nível 16 como máximo absoluto do Monólito do Abismo diverge de outras fontes; o portal trata 16 como marco da rota.'},
  {id:'rushvideos',title:'Duky / Fubgun · referências de rush',url:'https://aion2.vi.ki/item-level-roadmap',type:'Índice de vídeos · Global',note:'Aponta How To Get To 1400 Item Level, de Duky, e o rush de Fubgun. Vídeos não reproduzidos diretamente nesta revisão; roteiro cruzado com guias escritos.'},

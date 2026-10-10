@@ -14,3 +14,49 @@
 @media(max-width:780px){.portal-hero{padding:22px 22px 0}.hero-copy{max-width:100%}.hero-copy h1{letter-spacing:-2px}.hero-stamp{display:none}.session-bar{flex-wrap:wrap;padding:20px}.session-bar>div{flex-basis:100%}.class-picker{grid-template-columns:repeat(2,minmax(0,1fr))}.preset-hero{padding:22px}.preset-hero h2{font-size:27px}.preset-seal{font-size:44px}.hero-rail{font-size:7px}.class-tile{padding:18px 14px}.class-tile h3{font-size:18px}.class-tile .tag{font-size:7px}main{padding:28px 20px 48px}.reference-strip .btn{flex-grow:1}}
 @media(max-width:420px){.class-grid{grid-template-columns:1fr}.class-tile p{min-height:0}.class-glyph{height:50px}.tile-footer{margin-top:10px}.portal-hero .hero-actions .btn{width:100%}}
 .comparison-controls{display:flex;gap:22px;align-items:end;flex-wrap:wrap}.comparison-controls>div{flex:1;min-width:180px}.comparison-controls label{display:block;font-size:12px;margin-bottom:7px}.comparison-controls select{width:100%}.stat-target{width:110px;background:var(--bg);color:var(--text);border:1px solid var(--line);padding:8px}.reference-input{width:100%;margin-top:10px;padding:12px;border:1px solid var(--line)}.ai-dialog-body{padding:24px}.ai-dialog-body textarea{width:100%;font-size:12px}.ai-dialog-body .section-heading{margin-top:0}.hero-stamp span{letter-spacing:-3px}
+/* Handbook: readable reference pages, with independent section navigation. */
+#navigation{overflow-y:auto;min-height:0;padding-right:4px;scrollbar-width:thin;flex:1}
+#sidebar .nav-label{margin-top:25px}
+#sidebar .sidebar-bottom{flex-shrink:0;margin-top:15px;padding-top:13px}
+.guide-search{display:block;margin:28px 0 18px;font-size:12px;color:var(--muted)}
+.guide-search input{display:block;width:100%;margin-top:8px;padding:15px;background:var(--panel);border:1px solid var(--line);color:var(--text);font:inherit}
+.guide-tile{display:block;position:relative;padding-bottom:45px;transition:border-color .2s}
+.guide-tile:hover{border-color:var(--gold);text-decoration:none}
+.guide-tile-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.guide-symbol{font-size:32px;color:var(--gold)}
+.guide-tile h2{font-size:24px}
+.guide-start .grid{margin-top:24px}
+.guide-start a{padding:16px;border:1px solid var(--line);color:var(--text)}
+.guide-start a:hover{border-color:var(--gold);text-decoration:none}
+.guide-start p{font-size:13px;margin-bottom:0}
+.guide-back{display:inline-block;margin:0 0 24px;font-size:13px}
+.guide-layout{display:grid;grid-template-columns:210px minmax(0,1fr);gap:24px;align-items:start}
+.guide-toc{position:sticky;top:90px;display:grid;gap:6px;border-left:2px solid var(--line);padding-left:16px}
+.guide-toc a{font-size:12px;color:var(--muted);padding:8px 0}
+.guide-toc a:hover{color:var(--gold)}
+.guide-toc .tiny{margin-top:16px}
+.guide-content{min-width:0;display:grid;gap:20px}
+.guide-section{scroll-margin-top:95px}
+.guide-section h2{font-size:23px;margin-top:16px;line-height:1.35}
+.guide-section p{line-height:1.8}
+.guide-section table{min-width:480px}
+.guide-section th{font-size:11px}
+.guide-section td{font-size:13px;line-height:1.6;vertical-align:top;white-space:normal}
+.guide-section .table-wrap{margin-top:20px;margin-bottom:20px}
+.guide-action{border-top:3px solid var(--gold)}
+.guide-action h2{font-size:22px;line-height:1.4}
+.guide-tasks{display:grid;gap:12px;margin:24px 0}
+.guide-tasks label{display:flex;gap:12px;align-items:flex-start;cursor:pointer;font-size:14px}
+.guide-tasks input{accent-color:var(--gold);width:17px;height:17px;flex-shrink:0;margin-top:3px}
+.guide-tasks input:checked+span{text-decoration:line-through;color:var(--muted)}
+.guide-steps{padding-left:22px;line-height:1.8}
+.guide-steps li{padding-left:6px;margin-bottom:12px;font-size:14px}
+.guide-notice{padding:15px 18px;border-left:2px solid var(--gold);background:#ff956509;margin-top:20px}
+.guide-notice strong{font-size:12px;color:var(--gold)}
+.guide-notice p{font-size:13px;margin:8px 0 0}
+.guide-sources{display:flex;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:24px;padding-top:16px}
+.guide-sources a{font-size:11px;color:var(--gold)}
+.guide-sources small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+.guide-related{display:flex;flex-wrap:wrap;gap:10px;padding:20px 0}
+.guide-related .eyebrow{width:100%;margin-bottom:8px}
+@media(max-width:1000px){.guide-layout{grid-template-columns:1fr}.guide-toc{position:static;display:flex;flex-wrap:wrap;gap:10px;border:1px solid var(--line);padding:14px}.guide-toc .eyebrow{width:100%}.guide-toc a{padding:5px;font-size:11px}.guide-toc .tiny{display:none}}
